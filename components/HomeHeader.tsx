@@ -1,7 +1,11 @@
 import { Text, View } from "react-native";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
-export default function HomeHeader() {
+export default function HomeHeader({
+  isNotFixed: isFixed,
+}: {
+  isNotFixed?: boolean;
+}) {
   const [isBlur, setIsBlur] = useState<boolean>(false);
   useEffect(() => {
     const handleScroll = () => {
@@ -15,7 +19,7 @@ export default function HomeHeader() {
   });
   return (
     <View
-      className={`fixed top-0 flex h-12 w-full flex-row items-center justify-between bg-transparent px-[1.5rem] ${isBlur && "backdrop-blur-sm"}`}
+      className={`${!!isFixed && "fixed"} top-0 flex h-12 w-full flex-row items-center justify-between bg-transparent px-[1.5rem] ${isBlur && "backdrop-blur-sm"}`}
     >
       <Image
         source={require("../assets/images/logo.png")}
