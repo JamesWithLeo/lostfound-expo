@@ -3,6 +3,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useFonts } from "expo-font";
 import "../global.css"; // Global styles
 import { Stack } from "expo-router/stack"; // Expo Router Stack Navigation
+import { SessionProvider } from "@/context/SessionContext";
 
 // Prevent splash screen from auto-hiding before assets are loaded
 SplashScreen.preventAutoHideAsync();
@@ -24,11 +25,13 @@ export default function RootLayout() {
 
   return (
     // Use the Stack for routing non-tab pages
-    <Stack>
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="about" options={{ headerShown: false }} />
-      <Stack.Screen name="report" options={{ presentation: "modal" }} />
-    </Stack>
+    <SessionProvider>
+      <Stack>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="about" options={{ headerShown: false }} />
+        <Stack.Screen name="report" options={{ presentation: "modal" }} />
+      </Stack>
+    </SessionProvider>
   );
 }

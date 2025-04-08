@@ -4,7 +4,7 @@ import { Pressable, Text, TextInput, View } from "react-native";
 export default function Signup() {
   return (
     <View className="h-full w-full flex-col items-center justify-center bg-white">
-      <View className="mb-16 flex w-max flex-col items-center gap-4 rounded-2xl border border-gray-200 bg-white px-3 pb-4 pt-16 sm:w-[400px]">
+      <View className="mb-16 flex w-max flex-col items-center gap-4 rounded-2xl border border-gray-200 bg-white px-3 pb-3 pt-16 sm:w-[400px]">
         <View className="w-full">
           <Text className={`mb-4 text-left text-sm text-gray-600`}>
             Step 1 of 2
