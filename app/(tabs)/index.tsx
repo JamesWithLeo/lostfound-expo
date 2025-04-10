@@ -1,8 +1,10 @@
+import HomeHeader from "@/components/HomeHeader";
 import QuickSearchSection from "@/components/QuickSearchSection";
 import { useSession } from "@/context/SessionContext";
 import { Image } from "expo-image";
 import { Redirect } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { useState } from "react";
+import { Pressable, ScrollView, Text, View } from "react-native";
 
 export default function HomeScreen() {
   const { session, logout } = useSession();
@@ -14,10 +16,11 @@ export default function HomeScreen() {
     user: { firstName, lastName },
   } = session;
   return (
-    <View className="h-full w-full">
+    <ScrollView className="h-full w-full" scrollEventThrottle={16}>
+      <HomeHeader isAbsolute={true} />
       <Image
         source={require("../../assets/images/hero.png")}
-        className="h-48 w-full"
+        style={{ height: 192 }}
       />
       <QuickSearchSection />
       <View className="px-[1.5rem]">
@@ -31,8 +34,8 @@ export default function HomeScreen() {
           logout();
         }}
       >
-        Logout
+        <Text className="text-center">Logout</Text>
       </Pressable>
-    </View>
+    </ScrollView>
   );
 }

@@ -8,7 +8,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          header: (props) => <HomeHeader />,
+          headerShown: false,
           title: "Home",
           tabBarIcon: ({ color }) => (
             <FontAwesome size={24} name="home" color={color} />
@@ -18,7 +18,8 @@ export default function TabLayout() {
       <Tabs.Screen
         name="about"
         options={{
-          headerShown: false,
+          headerShown: true,
+          header: (props) => <HomeHeader />,
           title: "About",
           tabBarIcon: ({ color }) => (
             <FontAwesome size={24} name="users" color={color} />

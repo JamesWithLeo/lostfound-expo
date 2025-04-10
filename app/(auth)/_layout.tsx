@@ -1,7 +1,12 @@
 import AuthHeader from "@/components/AuthHeader";
-import { Link, Stack } from "expo-router";
+import { useSession } from "@/context/SessionContext";
+import { Link, Redirect, Stack } from "expo-router";
 
 export default function AuthLayout() {
+  const { session } = useSession();
+  if (session) {
+    return <Redirect href={"/"} />;
+  }
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen

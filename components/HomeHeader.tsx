@@ -1,29 +1,20 @@
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { useEffect, useState } from "react";
 export default function HomeHeader({
-  isNotFixed: isFixed,
+  isBlur,
+  isAbsolute,
 }: {
-  isNotFixed?: boolean;
+  isBlur?: boolean;
+  isAbsolute?: boolean;
 }) {
-  const [isBlur, setIsBlur] = useState<boolean>(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      const triggerHeight = 1;
-      setIsBlur(window.scrollY > triggerHeight);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
   return (
     <View
-      className={`${!!isFixed && "fixed"} top-0 flex h-12 w-full flex-row items-center justify-between bg-transparent px-[1.5rem] ${isBlur && "backdrop-blur-sm"}`}
+      className={`${isAbsolute && "absolute"} ${!isBlur && "backdrop-blur-sm"} top-0 z-10 flex h-16 w-full flex-row items-center justify-between bg-transparent px-[1.5rem]`}
     >
       <Image
         source={require("../assets/images/logo.png")}
-        className="h-16 w-16"
+        style={{ height: 64, width: 64 }}
         contentFit="contain"
       />
     </View>

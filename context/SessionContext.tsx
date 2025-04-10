@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
 import { Platform } from "react-native";
 import { useRouter } from "expo-router";
+
 interface IUser {
   id: string;
   firstName: string | null;
@@ -47,25 +48,6 @@ export const useSession = () => {
   return useContext(SessionContext);
 };
 
-const getCurrentSesion = (isWeb: boolean) => {
-  const accessToken = localStorage.getItem("accessToken") ?? null;
-  const localUser = localStorage.getItem("user") ?? null;
-
-  if (!accessToken || !localUser) {
-    return null;
-  }
-  const user = JSON.parse(localUser);
-  if (!isIUser(user)) {
-    return null;
-  }
-  return isWeb
-    ? {
-        accessToken,
-        user,
-      }
-    : null;
-};
-
 export const SessionProvider = ({
   children,
 }: {
@@ -77,11 +59,11 @@ export const SessionProvider = ({
   const [session, setSession] = useState<{
     accessToken: string;
     user: IUser;
-  } | null>(getCurrentSesion(isWeb));
+  } | null>(null);
   const login = async (accessToken: string, user: IUser) => {
     if (isWeb) {
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("user", JSON.stringify(user));
+      // localStorage.setItem("accessToken", accessToken);
+      // localStorage.setItem("user", JSON.stringify(user));
     } else {
       await SecureStore.setItemAsync("accessToken", accessToken);
       await SecureStore.setItemAsync("user", JSON.stringify(user));
@@ -106,8 +88,8 @@ export const SessionProvider = ({
       let accessToken;
       let userData;
       if (isWeb) {
-        accessToken = localStorage.getItem("accessToken");
-        userData = localStorage.getItem("user");
+        // accessToken = localStorage.getItem("accessToken");
+        // userData = localStorage.getItem("user");
       } else {
         accessToken = await SecureStore.getItemAsync("accessToken");
         userData = await SecureStore.getItemAsync("user");
