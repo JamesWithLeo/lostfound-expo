@@ -17,5 +17,5 @@ export const CATEGORIES = [
   "art & collectibles",
   "tools & equipment",
   "garden supplies",
-] as const;
-// export const TypeCategory = CATEGORIES
+];
+export type Category = (typeof CATEGORIES)[number];

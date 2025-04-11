@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { fetchUserInfoAsync } from "expo-auth-session/build/TokenRequest";
 import { useSession } from "@/context/SessionContext";
 import * as AuthSession from "expo-auth-session";
+import { api } from "@/constants/api";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -25,25 +26,22 @@ export default function GoogleButton() {
   //request - An instance of AuthRequest that can be used to prompt the user for authorization. This will be null until the auth request has finished loading.
   //response - This is null until promptAsync has been invoked. Once fulfilled it will return information about the authorization.
   //promptAsync - When invoked, a web browser will open up and prompt the user for authentication. Accepts an AuthRequestPromptOptions object with options about how the prompt will execute.
-  const fetchUser = async (token: string) => {
+  const fetchUser = async (accessToken: string, idToken: string) => {
     try {
       const userInfo = await fetchUserInfoAsync(
-        { accessToken: token },
+        { accessToken: accessToken },
         Google.discovery,
       );
       console.log("Fetched User:", userInfo);
-      const res = await fetch(
-        "https://lost-and-found-chi.vercel.app/api/expo",
-        {
-          headers: {
-            "x-user-email": userInfo.email,
-            "x-provider": "google",
-            "Content-Type": "application/json",
-          },
+      const res = await fetch(`${api}/auth/google`, {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
         },
-      );
+      });
       const { email, user } = await res.json();
-      login(email, user);
+      if (user) {
+        login(email, user);
+      }
     } catch (error) {
       console.error("Failed to fetch user info:", error);
     }
@@ -52,8 +50,8 @@ export default function GoogleButton() {
   useEffect(() => {
     if (response?.type === "success") {
       const { authentication } = response;
-      if (authentication?.accessToken) {
-        fetchUser(authentication.accessToken);
+      if (authentication?.accessToken && authentication?.idToken) {
+        fetchUser(authentication.accessToken, authentication.idToken);
       }
     }
   }, [response]);

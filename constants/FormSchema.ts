@@ -23,3 +23,12 @@ export const postSearchSchema = z.object({
     .max(256),
   desc: z.string().optional(),
 });
+
+export const setupSchema = z.object({
+  firstName: z.string().min(2).max(255),
+  lastName: z.string().min(2).max(255),
+  gender: z.enum(["male", "female"]),
+  birthDate: z
+    .date()
+    .max(new Date(), { message: "Birth day must not be in the future" }),
+});
