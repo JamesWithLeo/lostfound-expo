@@ -1,9 +1,10 @@
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { Image } from "expo-image";
-import { Link } from "expo-router";
-import { View, Text } from "react-native";
+import { Link, useRouter } from "expo-router";
+import { View, Text, Pressable } from "react-native";
 
 export default function NewMyItemHeader() {
+  const router = useRouter();
   return (
     <View className="top-0 grid w-full grid-rows-2 flex-col justify-between gap-4 border-slate-200 bg-white">
       <View className="col-start-1 row-start-1 flex flex-row justify-between px-[1.5rem]">
@@ -18,8 +19,10 @@ export default function NewMyItemHeader() {
         </View>
       </View>
 
-      <Link
-        href={"/(item)/(new)/found-item"}
+      <Pressable
+        onPress={() => {
+          router.replace("/(item)/(new)/found-item");
+        }}
         className="col-start-1 row-start-2 flex flex-col gap-4 border-b border-slate-200 px-[1.5rem] pb-4"
       >
         <View className="">
@@ -30,7 +33,7 @@ export default function NewMyItemHeader() {
           <Text>Found something? Post it instead.</Text>
           <FontAwesome6 name={"arrows-left-right"} />
         </View>
-      </Link>
+      </Pressable>
     </View>
   );
 }

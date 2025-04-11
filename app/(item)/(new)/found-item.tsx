@@ -1,10 +1,12 @@
-import { ScrollView, Text } from "react-native";
+import { useSession } from "@/context/SessionContext";
+import UploadItemForm from "@/components/UploadItemForm";
 
 export default function FoundItem() {
+  const { session } = useSession();
+
   return (
-    <ScrollView>
-      {/* <Text>Report Found items</Text>
-      <Text>Let's help you return items to rightful owner!</Text> */}
-    </ScrollView>
+    <>
+      <UploadItemForm mode="found" userId={session?.user.id} />
+    </>
   );
 }

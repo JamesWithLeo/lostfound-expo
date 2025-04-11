@@ -26,6 +26,17 @@ export default function TabLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="Profile"
+        options={{
+          headerShown: true,
+          header: (props) => <HomeHeader />,
+          tabBarIcon: ({ color }) => (
+            <FontAwesome size={24} name="user-circle-o" color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
