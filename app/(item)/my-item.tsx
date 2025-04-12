@@ -5,13 +5,12 @@ import { FlatList, Platform, Text, View } from "react-native";
 import { ItemType } from "@/constants/types";
 import ItemCard from "@/components/ItemCard";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 export default function MyItem() {
   const { session } = useSession();
   const { bottom } = useSafeAreaInsets();
-  if (!session?.user.id) {
+  if (!session?.user.id || !session.user.id) {
     return <Redirect href={"/"} />;
   }
   const { isLoading, error, data, refetch, isSuccess, isRefetching } = useItems(
