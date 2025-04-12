@@ -20,7 +20,7 @@ export default function HomeScreen() {
     !session.user.birthDate ||
     !session.user.gender
   ) {
-    return <Redirect href="/(auth)/signup" />;
+    return <Redirect href="/(auth)/setup" />;
   }
 
   const {
@@ -40,7 +40,7 @@ export default function HomeScreen() {
     <>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ gap: 8 }}
+        contentContainerStyle={{ gap: 8, paddingBottom: 8 }}
         scrollEventThrottle={16}
       >
         <HomeHeader isAbsolute={true} />
@@ -60,7 +60,7 @@ export default function HomeScreen() {
         <Statistics />
         <View style={{ paddingLeft: 24, paddingRight: 24, gap: 8 }}>
           {lostQuery?.isSuccess && Array.isArray(lostQuery.data?.items) && (
-            <View className="mt-6 gap-2 px-6">
+            <View className="mt-6 gap-2">
               <View className="mb-2 flex w-full flex-row items-center justify-between">
                 <Text className="text-lg font-semibold">Your Lost Items</Text>
                 <Link href="/(item)/my-item">
@@ -83,7 +83,7 @@ export default function HomeScreen() {
           )}
 
           {foundQuery?.isSuccess && Array.isArray(foundQuery.data?.items) && (
-            <View className="mt-6 gap-2 px-6">
+            <View className="mt-6 gap-2">
               <View className="mb-2 flex w-full flex-row items-center justify-between">
                 <Text className="text-lg font-semibold">Items You Found</Text>
                 <Link href="/(item)/found-item">

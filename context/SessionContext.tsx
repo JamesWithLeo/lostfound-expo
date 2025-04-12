@@ -1,6 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { Platform } from "react-native";
 import { useRouter } from "expo-router";
 
 interface IUser {
@@ -37,6 +36,7 @@ interface ISession {
   logout: () => void;
   session: { accessToken: string; user: IUser } | null;
   isLoading: boolean;
+  updateUserProfile: (updates: Partial<IUser>) => void;
 }
 
 const SessionContext = createContext<ISession>({
@@ -44,6 +44,7 @@ const SessionContext = createContext<ISession>({
   logout: async () => {},
   session: null,
   isLoading: true,
+  updateUserProfile: (update: {}) => undefined,
 });
 
 export const useSession = () => {
@@ -61,10 +62,10 @@ export const SessionProvider = ({
     accessToken: string;
     user: IUser;
   } | null>(null);
+
   const login = async (accessToken: string, user: IUser) => {
     await SecureStore.setItemAsync("accessToken", accessToken);
     await SecureStore.setItemAsync("user", JSON.stringify(user));
-
     setSession({ accessToken, user });
     router.navigate("/");
   };
@@ -75,6 +76,15 @@ export const SessionProvider = ({
 
     setSession(null);
   };
+  const updateUserProfile = (updates: Partial<IUser>) => {
+    const currentUser = session?.user;
+    if (!currentUser) return;
+
+    const updatedUser = { ...currentUser, ...updates };
+    SecureStore.setItemAsync("user", JSON.stringify(updatedUser));
+    setSession((prev) => (prev ? { ...prev, user: updatedUser } : prev));
+  };
+
   useEffect(() => {
     const loadSession = async () => {
       let accessToken;
@@ -93,7 +103,9 @@ export const SessionProvider = ({
   }, []);
 
   return (
-    <SessionContext.Provider value={{ login, logout, session, isLoading }}>
+    <SessionContext.Provider
+      value={{ login, logout, session, isLoading, updateUserProfile }}
+    >
       {children}
     </SessionContext.Provider>
   );

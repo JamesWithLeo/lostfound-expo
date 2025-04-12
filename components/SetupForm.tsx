@@ -9,8 +9,12 @@ import { z } from "zod";
 import { setupSchema } from "@/constants/FormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { api } from "@/constants/api";
+import { useSession } from "@/context/SessionContext";
+import { useRouter } from "expo-router";
 
 export default function SetupForm({ userId }: { userId: string | undefined }) {
+  const router = useRouter();
+  const { updateUserProfile } = useSession();
   const [isDatePickerVisible, setIsDatePickerVisible] =
     useState<boolean>(false);
   const [isTimePickerVisible, setIsTimePickerVisible] =
@@ -33,19 +37,19 @@ export default function SetupForm({ userId }: { userId: string | undefined }) {
       const newTime = selectedTime ?? newBirthDate;
       setNewBirthDate(newTime);
     }
-    setIsDatePickerVisible(false);
+    setIsTimePickerVisible(false);
   };
   const {
     handleSubmit,
     control,
-    formState: { isLoading, errors },
+    formState: { isSubmitting, errors },
   } = useForm<z.infer<typeof setupSchema>>({
     resolver: zodResolver(setupSchema),
   });
   const onSubmit: SubmitHandler<z.infer<typeof setupSchema>> = async (data) => {
     if (!userId) return;
     try {
-      const res = await fetch(`${api}/auth/setup/${userId}`, {
+      const response = await fetch(`${api}/auth/setup/${userId}`, {
         method: "POST",
         body: JSON.stringify({ ...data }),
         headers: {
@@ -53,10 +57,14 @@ export default function SetupForm({ userId }: { userId: string | undefined }) {
         },
       });
 
-      if (!res.ok) {
-        throw new Error(`Fetch failed with status ${res.status}`);
+      if (!response.ok) {
+        throw new Error(`Fetch failed with status ${response.status}`);
       }
-      await res.json();
+      const result = await response.json();
+      if (result.user) {
+        updateUserProfile(result.user);
+        router.replace("/");
+      }
     } catch (error) {
       console.error("Fetch error:", error);
     }
@@ -65,9 +73,12 @@ export default function SetupForm({ userId }: { userId: string | undefined }) {
     <>
       <View className="w-full">
         <>
-          <Text className={`mb-4 text-left text-sm text-gray-600`}>
-            Step 2 of 2
-          </Text>
+          <View className="mb-4">
+            <Text className={`text-left text-sm text-gray-600`}>
+              Step 2 of 2
+            </Text>
+            <Text className="text-xs">UID:{userId}</Text>
+          </View>
           <View className="flex w-full flex-row items-center gap-2">
             <View className="border-primary w-1/2 border-b-4"></View>
             <View className="border-primary w-1/2 border-b-4"></View>
@@ -140,7 +151,17 @@ export default function SetupForm({ userId }: { userId: string | undefined }) {
               control={control}
               name="gender"
               render={({ field }) => (
-                <Picker>
+                <Picker
+                  // onValueChange={(newValue) => {
+                  //   console.log(newValue);
+                  //   if (newValue) {
+                  //     onChange(newValue);
+                  //   }
+                  // }}
+                  {...field}
+                  onValueChange={field.onChange}
+                >
+                  <Picker.Item label="Select your gender" />
                   <Picker.Item label="Male" value={"male"} />
                   <Picker.Item label="Female" value={"female"} />
                 </Picker>
@@ -212,9 +233,11 @@ export default function SetupForm({ userId }: { userId: string | undefined }) {
         <Pressable
           className="bg-primary w-full rounded-xl py-2 text-center text-white"
           onPress={handleSubmit(onSubmit)}
-          disabled={isLoading}
+          disabled={isSubmitting}
         >
-          <Text className="text-center text-white">Submit</Text>
+          <Text className="text-center text-white">
+            {isSubmitting ? "Submitting" : "Submit"}
+          </Text>
         </Pressable>
       </View>
     </>

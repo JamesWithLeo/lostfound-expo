@@ -1,5 +1,7 @@
 import AuthHeader from "@/components/AuthHeader";
+import LogoutButton from "@/components/LogoutButton";
 import { Link, Stack } from "expo-router";
+import { Pressable, Text } from "react-native";
 
 export default function AuthLayout() {
   return (
@@ -38,6 +40,14 @@ export default function AuthLayout() {
               }
             />
           ),
+        }}
+      />
+
+      <Stack.Screen
+        name="setup"
+        options={{
+          headerShown: true,
+          header: (props) => <AuthHeader link={<LogoutButton />} />,
         }}
       />
     </Stack>

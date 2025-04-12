@@ -6,11 +6,13 @@ import { fetchUserInfoAsync } from "expo-auth-session/build/TokenRequest";
 import { useSession } from "@/context/SessionContext";
 import * as AuthSession from "expo-auth-session";
 import { api } from "@/constants/api";
+import { useRouter } from "expo-router";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function GoogleButton() {
   const { login } = useSession();
+  const router = useRouter();
   //client IDs from .env
 
   const [request, response, promptAsync] = Google.useAuthRequest({

@@ -1,6 +1,6 @@
 import { View } from "react-native";
 import { Image } from "expo-image";
-export default function AuthHeader({ link }: { link: React.ReactNode }) {
+export default function AuthHeader({ link }: { link?: React.ReactNode }) {
   return (
     <View
       className={`$ top-0 flex h-16 w-full flex-row items-center justify-between bg-white px-[1.5rem]`}
