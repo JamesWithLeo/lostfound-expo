@@ -9,7 +9,6 @@ import { Image } from "expo-image";
 import { Link, Redirect, router, useRouter } from "expo-router";
 import { ScrollView, Text, View } from "react-native";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { useEffect } from "react";
 
 export default function HomeScreen() {
   const { session, isLoading } = useSession();
