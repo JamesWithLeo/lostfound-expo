@@ -58,7 +58,7 @@ export default function HomeScreen() {
         </View>
         <Statistics />
         <View style={{ paddingLeft: 24, paddingRight: 24, gap: 8 }}>
-          {lostQuery?.isSuccess && Array.isArray(lostQuery.data?.items) && (
+          {lostQuery.isSuccess && Array.isArray(lostQuery.data?.items) && (
             <View className="mt-6 gap-2">
               <View className="mb-2 flex w-full flex-row items-center justify-between">
                 <Text className="text-lg font-semibold">Your Lost Items</Text>
@@ -81,7 +81,7 @@ export default function HomeScreen() {
             </View>
           )}
 
-          {foundQuery?.isSuccess && Array.isArray(foundQuery.data?.items) && (
+          {foundQuery.isSuccess && Array.isArray(foundQuery.data?.items) && (
             <View className="mt-6 gap-2">
               <View className="mb-2 flex w-full flex-row items-center justify-between">
                 <Text className="text-lg font-semibold">Items You Found</Text>
